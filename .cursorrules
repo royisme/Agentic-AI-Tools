@@ -1,0 +1,108 @@
+# Instructions
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), **especially about a fix to a mistake you made or a correction you received**, you should take note in the **`Lessons`** section in the `.cursorrules` file so you will not make the same mistake again.
+
+You should also use the **`.cursorrules`** file as a scratchpad to organize your thoughts. Especially when you receive a new task:
+1. First **review the content of the scratchpad**; clear or revise old tasks if necessary.  
+2. **Explain the new task** and plan the steps you need to take to complete it. You may use todo markers to indicate your progress, for example:
+
+```
+[X] Task 1
+[ ] Task 2
+```
+
+3. **Update the Scratchpad** after you finish each subtask (or milestone). Reflect on and plan the next step; this helps you maintain a “big picture” of the project and also ensures higher-quality results.
+
+**Always refer to the Scratchpad** whenever you plan your next step or reorient your tasks.
+
+
+# Tools
+
+All the following Python tools now reside in an **external directory named `.agentic_ai/`**. Please remember to call them with the correct path. For instance, if you want to execute them, you might do:
+
+```
+python .agentic_ai/<tool_name>.py <arguments>
+```
+
+## 1. Multi-LLM
+
+We have a single **unified** LLM invocation script located at:
+```
+.agentic_ai/multi_llm.py
+```
+This script allows you to query multiple providers (OpenAI, Anthropic, Ollama, LocalHTTP for local/RESTful, and Google Gemini 2.0) via command-line. 
+
+Typical usage:
+```
+python ~/.agentic_ai/multi_llm.py \
+    --provider <provider_name> \
+    --model <model_name> \
+    --prompt "Your prompt here"
+```
+
+Where:
+- `--provider` can be one of: `openai`, `anthropic`, `ollama`, `localhttp`, `gemini`.
+- `--model` is the model name, depending on the provider (e.g., `gpt-3.5-turbo` for OpenAI, `claude-2` for Anthropic, `gemini-2.0-flash-exp` for Google Gemini, etc.).
+- `--prompt` is your input prompt.
+
+You can also adjust `--temperature`, or add more advanced flags if needed.
+
+## 2. Enhanced Web Scraper
+
+We have an upgraded **web scraping** utility at:
+```
+~/.agentic_ai/web_scraper.py
+```
+It uses Playwright for **asynchronous** page fetch and optional **parallel** HTML parsing. 
+
+Basic usage example:
+```
+python .agentic_ai/web_scraper.py \
+    --max-concurrent 3 \
+    --json \
+    --headless \
+    URL1 URL2 ...
+```
+
+**Key flags** include:
+- `--max-concurrent` to limit concurrent browser contexts.  
+- `--json` to output results in JSON format (otherwise prints Markdown-like text).  
+- `--headless` to run in headless mode.  
+
+After scraping, you can parse or analyze the returned content as needed.
+
+## 3. Enhanced Search Engine
+
+We also have an improved **search engine** utility:
+```
+~/.agentic_ai/search_engine.py
+```
+This script queries DuckDuckGo (HTML backend) with enhanced logging, JSON output options, and additional parameters like `--region`, `--safesearch`, etc.
+
+Example usage:
+```
+python ~/.agentic_ai/search_engine.py \
+    "your search keywords" \
+    --json \
+    --max-results 5 \
+    --region us-en
+```
+If you get back search results, you can feed the URLs into the **web_scraper.py** for deeper scraping.
+
+
+# Lessons
+
+## User Specified Lessons
+
+- You have those tools in `~/.agentic_ai`.
+- Include info useful for debugging in the program output.
+- Read the file before you try to edit it.
+- Use LLM to perform flexible text understanding tasks. First test on a few files. After success, make it parallel.
+
+## Cursor learned
+
+- For website image paths, always use the correct relative path (e.g., `images/filename.png`) and ensure the images directory exists.
+- For search results, ensure proper handling of different character encodings (UTF-8) for international queries.
+- Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration.
+- When using seaborn styles in matplotlib, use `'seaborn-v0_8'` instead of `'seaborn'` due to recent seaborn version changes.
+```
